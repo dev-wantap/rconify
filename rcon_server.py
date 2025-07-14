@@ -3,6 +3,7 @@ import socket
 import struct
 import threading
 import time
+import traceback
 
 import screen_handler
 
@@ -66,6 +67,7 @@ class RCONServer:
                             
                     except Exception as e:
                         print(f"Command error: {e}")
+                        traceback.print_exc()
                         break
                         
             else:
