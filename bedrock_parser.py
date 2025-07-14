@@ -9,7 +9,7 @@ class BedrockParser:
         # ANSI 색상 코드 제거 패턴
         self.ansi_pattern = re.compile(r'\x1b\[[0-9;]*m')
         # 게임 색상 코드 제거 패턴 (§2, §a 등)
-        self.game_color_pattern = re.compile(r'§[0-9a-fk-or]')
+        self.game_color_pattern = re.compile(r'\xa7[0-9a-fk-or]')
     
     def get_command_response(self, raw_output, sent_command, max_response_lines=10):
         """입력한 명령어 아래 라인들을 제한된 개수만 추출"""
