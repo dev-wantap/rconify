@@ -17,7 +17,7 @@ class BedrockScreenHandler:
 
     def capture_output(self):
         subprocess.run(['screen', '-S', self.session_name, '-X', 'hardcopy', self.output_file])
-        with open(self.output_file, 'r', errors='ignore') as f:
+        with open(self.output_file, 'r', encoding='latin-1') as f:
             return f.read()
 
     def execute_command(self, command):
