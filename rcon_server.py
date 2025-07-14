@@ -5,6 +5,10 @@ import threading
 import time
 import traceback
 
+
+class ConnectionClosed(Exception):
+    pass
+
 import screen_handler
 
 
@@ -65,6 +69,10 @@ class RCONServer:
                             response = self._pack_data(req_id, 0, result)  # RESPONSE_VALUE
                             client_socket.send(response)
                             
+                    except ConnectionClosed:
+                        # 클라이언트가 정상적으로 연결을 종료한 경우
+                        print(f"Client {client_socket.getpeername()} disconnected.")
+                        break
                     except Exception as e:
                         print(f"Command error: {e}")
                         traceback.print_exc()
@@ -84,7 +92,7 @@ class RCONServer:
         """패킷 읽기"""
         length_data = socket.recv(4)
         if not length_data:
-            raise Exception("Connection closed")
+            raise ConnectionClosed("Connection closed by client")
         
         length = struct.unpack('<I', length_data)[0]
         packet_data = socket.recv(length)
