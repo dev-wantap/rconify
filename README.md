@@ -1,4 +1,4 @@
-# RCONify - RCON Bridge for Minecraft Bedrock Server
+# RCONify - RCON Bridge for Minecraft Bedrock Dedicated Server
 
 RCONify is a Python-based bridge server that provides RCON (Remote Console) functionality to Minecraft Bedrock Edition servers, which do not natively support the RCON protocol.
 
