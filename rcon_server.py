@@ -8,7 +8,7 @@ import screen_handler
 
 
 class RCONServer:
-    def __init__(self, screen_handler, host='localhost', port=25575, password='password'):
+    def __init__(self, screen_handler, host='0.0.0.0', port=25575, password='password'):
         self.screen_handler = screen_handler
         self.host = host
         self.port = port
