@@ -33,32 +33,36 @@ class BedrockParser:
         return None
     
     def _extract_response_lines(self, lines, start_index, max_lines):
-        """명령어 라인 아래의 응답 라인들 추출"""
+        """명령어 라인 아래의 응답 라인들 추출 (개선된 로직)"""
         response_lines = []
-        collected_lines = 0
         
+        # 명령어 바로 다음 라인부터 시작
         for line in lines[start_index + 1:]:
-            if collected_lines >= max_lines:
+            # 최대 라인 수에 도달하면 중단
+            if len(response_lines) >= max_lines:
                 break
-            
+                
             line = line.strip()
             if not line:
                 continue
+
+            # 휴리스틱: 새로운 타임스탬프 로그는 이전 명령어 응답의 끝을 의미.
+            # (단, 첫 번째 응답 라인은 타임스탬프를 가질 수 있으므로, 이미 응답을 수집하기 시작했을 때만 적용)
+            if response_lines and self.log_pattern.match(line):
+                break
+                
+            # 라인 파싱: 로그 형식이면 메시지만 추출, 아니면 전체 라인 사용
+            match = self.log_pattern.match(line)
+            if match:
+                _, message = match.groups()
+                parsed_line = self._remove_color_codes(message)
+            else:
+                parsed_line = self._remove_color_codes(line)
             
-            parsed_line = self._parse_log_line(line)
             if parsed_line:
                 response_lines.append(parsed_line)
-                collected_lines += 1
-        
+                
         return response_lines
-    
-    def _parse_log_line(self, line):
-        """서버 로그 라인 파싱"""
-        match = self.log_pattern.match(line)
-        if match:
-            timestamp, message = match.groups()
-            return self._remove_color_codes(message)
-        return None
     
     def _remove_color_codes(self, text):
         """ANSI 색상 코드와 게임 색상 코드 제거"""
