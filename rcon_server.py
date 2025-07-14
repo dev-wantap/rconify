@@ -2,14 +2,11 @@
 import socket
 import struct
 import threading
-import time
 import traceback
 
 
 class ConnectionClosed(Exception):
     pass
-
-import screen_handler
 
 
 class RCONServer:
